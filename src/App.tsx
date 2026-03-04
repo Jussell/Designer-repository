@@ -102,12 +102,12 @@ const designers = [
 ];
 
 const mockProducts = [
-  { id: 1, name: "Vestido Midi Estampado", designer: "Johanna Ortiz", price: "$ 1,200.000", image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=400&auto=format&fit=crop" },
-  { id: 2, name: "Blusa Asimétrica", designer: "Silvia Tcherassi", price: "$ 850.000", image: "https://images.unsplash.com/photo-1551163943-3f6a855d1153?q=80&w=400&auto=format&fit=crop" },
-  { id: 3, name: "Pantalón de Lino", designer: "Zierra Leona", price: "$ 450.000", image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=400&auto=format&fit=crop" },
-  { id: 4, name: "Cartera en Cuero", designer: "Amarante", price: "$ 620.000", image: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=400&auto=format&fit=crop" },
-  { id: 5, name: "Traje de Baño Enterizo", designer: "Maygel Coronel", price: "$ 580.000", image: "https://images.unsplash.com/photo-1564222256577-45e728f2c611?q=80&w=400&auto=format&fit=crop" },
-  { id: 6, name: "Vestido de Punto", designer: "Pepa Pombo", price: "$ 1,100.000", image: "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?q=80&w=400&auto=format&fit=crop" },
+  { id: 1, name: "Carnaval", designer: "VOIE", price: "$578.200", image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=400&auto=format&fit=crop", tags: ["Exclusivo Malva", "New in"] },
+  { id: 2, name: "Blusa Daphne", designer: "PAMELA STEVENSON", price: "$800.000", image: "https://images.unsplash.com/photo-1551163943-3f6a855d1153?q=80&w=400&auto=format&fit=crop", tags: ["New in"] },
+  { id: 3, name: "Jeans Western Embroidered", designer: "PIANI", price: "$450.000", image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=400&auto=format&fit=crop", tags: ["New in"] },
+  { id: 4, name: "Cartera en Cuero", designer: "AMARANTE", price: "$620.000", image: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=400&auto=format&fit=crop", tags: [] },
+  { id: 5, name: "Traje de Baño Enterizo", designer: "MAYGEL CORONEL", price: "$580.000", image: "https://images.unsplash.com/photo-1564222256577-45e728f2c611?q=80&w=400&auto=format&fit=crop", tags: ["Exclusivo Malva"] },
+  { id: 6, name: "Vestido de Punto", designer: "PEPA POMBO", price: "$1,100.000", image: "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?q=80&w=400&auto=format&fit=crop", tags: ["New in"] },
 ];
 
 const RealisticPaperclip = ({ className }: { className?: string }) => (
@@ -227,11 +227,11 @@ function ProductCarousel() {
         
         <div 
           ref={scrollRef}
-          className="flex overflow-x-auto gap-4 md:gap-6 pb-6 snap-x snap-mandatory hide-scrollbar"
+          className="flex overflow-x-auto gap-[2px] pb-6 snap-x snap-mandatory hide-scrollbar"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {mockProducts.map((product) => (
-            <div key={product.id} className="min-w-[260px] md:min-w-[300px] snap-start group cursor-pointer">
+            <div key={product.id} className="min-w-[85vw] md:min-w-[calc(33.333%-2px)] snap-start group cursor-pointer">
               <div className="aspect-[3/4] overflow-hidden bg-gray-100 mb-4 relative">
                 <img 
                   src={product.image} 
@@ -245,10 +245,20 @@ function ProductCarousel() {
                   </span>
                 </div>
               </div>
-              <div className="text-center">
-                <p className="font-serif italic text-gray-500 text-sm mb-1">{product.designer}</p>
-                <h5 className="font-sans font-medium text-gray-900 text-sm uppercase tracking-wide mb-2">{product.name}</h5>
-                <p className="font-sans text-gray-600 text-sm">{product.price}</p>
+              <div className="text-left px-1">
+                <h5 className="font-sans font-semibold text-gray-900 text-sm uppercase tracking-wider mb-1">{product.designer}</h5>
+                <p className="font-sans text-gray-700 text-sm mb-0.5">{product.name}</p>
+                <p className="font-sans text-gray-700 text-sm mb-1">{product.price}</p>
+                {product.tags && product.tags.length > 0 && (
+                  <p className="font-sans text-gray-500 text-sm mt-1">
+                    {product.tags.map((tag, i) => (
+                      <React.Fragment key={i}>
+                        {i > 0 && <span className="mx-1.5">|</span>}
+                        {tag}
+                      </React.Fragment>
+                    ))}
+                  </p>
+                )}
               </div>
             </div>
           ))}
@@ -405,10 +415,10 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Chunk designers into groups of 4
+  // Chunk designers into groups of 3
   const chunkedDesigners = [];
-  for (let i = 0; i < designers.length; i += 4) {
-    chunkedDesigners.push(designers.slice(i, i + 4));
+  for (let i = 0; i < designers.length; i += 3) {
+    chunkedDesigners.push(designers.slice(i, i + 3));
   }
 
   return (
@@ -439,7 +449,7 @@ export default function App() {
           <div key={`chunk-${chunkIndex}`} className="mb-8">
             {/* Designers Row/Carousel */}
             <div className="max-w-[1800px] mx-auto px-4 md:px-8 lg:px-12">
-              <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 pb-8 snap-x snap-mandatory hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 pb-8 snap-x snap-mandatory hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 {chunk.map((designer, index) => (
                   <div key={designer.id} className="min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center">
                     <FolderCard designer={designer} index={index} />
