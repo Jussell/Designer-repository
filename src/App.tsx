@@ -1,0 +1,302 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
+
+const designers = [
+  {
+    id: 1,
+    name: "Amarante",
+    subtitle: "nació de la amistad y la complicidad entre dos mujeres colombianas:",
+    description: "Antonia Villegas y Manuela Cordovez. Amarante es, ante todo, una marca creada por mujeres y pensada para mujeres que quieren sentirse seguras, elegantes y auténticas, con accesorios que elevan lo cotidiano y se convierten en verdaderos protagonistas.",
+    image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=600&auto=format&fit=crop",
+    tabText: "Manual de Uso"
+  },
+  {
+    id: 2,
+    name: "Zierra Leona",
+    subtitle: "nació del sueño que compartimos mi mamá y yo",
+    description: "Unir nuestro amor por los animales, la naturaleza y el diseño en una marca con propósito. Desde el inicio quisimos crear algo más que ropa; una marca para almas jóvenes, libres y auténticas, que haga sentir a cada mujer en su mejor versión: segura, poderosa y diferente.",
+    image: "https://images.unsplash.com/photo-1485230405346-71acb9518d9c?q=80&w=600&auto=format&fit=crop",
+    tabText: "Manual de Uso"
+  },
+  {
+    id: 3,
+    name: "Andrés Otálora",
+    subtitle: "celebra la feminidad a través de la sofisticación:",
+    description: "Con más de dos décadas en la industria, sus diseños destacan por estampados exclusivos y siluetas que realzan la figura. Una propuesta ideal para regalar elegancia atemporal y piezas que trascienden las temporadas con un innegable sello de autor.",
+    image: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=600&auto=format&fit=crop",
+    tabText: "Colección"
+  },
+  {
+    id: 4,
+    name: "Johanna Ortiz",
+    subtitle: "la alegría de vivir plasmada en cada puntada:",
+    description: "Reconocida mundialmente por sus boleros, estampados tropicales y siluetas fluidas. Regalar Johanna Ortiz es obsequiar una pieza de arte que invita a celebrar la vida, perfecta para la mujer que disfruta ser el centro de atención con gracia y naturalidad.",
+    image: "https://images.unsplash.com/photo-1515347619362-71efdf18c01b?q=80&w=600&auto=format&fit=crop",
+    tabText: "Esenciales"
+  },
+  {
+    id: 5,
+    name: "Maygel Coronel",
+    subtitle: "redefiniendo el resort wear con versatilidad:",
+    description: "Sus piezas, que transitan perfectamente de la playa a la ciudad, son el regalo ideal para la mujer contemporánea. Volúmenes dramáticos y tejidos que abrazan el cuerpo en una paleta de colores que evoca la calidez del Caribe colombiano.",
+    image: "https://images.unsplash.com/photo-1550614000-4b95dd10cb64?q=80&w=600&auto=format&fit=crop",
+    tabText: "Resort"
+  },
+  {
+    id: 6,
+    name: "Pepa Pombo",
+    subtitle: "el legado del tejido de punto llevado a la alta moda:",
+    description: "Una herencia familiar que se traduce en prendas multifuncionales y llenas de color. Un regalo de Pepa Pombo es una inversión en diseño inteligente, donde cada pieza puede transformarse y adaptarse a múltiples ocasiones con absoluta sofisticación.",
+    image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=600&auto=format&fit=crop",
+    tabText: "Herencia"
+  },
+  {
+    id: 7,
+    name: "Silvia Tcherassi",
+    subtitle: "pionera del chic latinoamericano en el mundo:",
+    description: "Sus colecciones son sinónimo de lujo desestructurado y elegancia sin esfuerzo. Regalar una pieza de Silvia Tcherassi es entregar un ícono de la moda, donde la innovación textil y la impecable confección se encuentran en perfecta armonía.",
+    image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=600&auto=format&fit=crop",
+    tabText: "Iconos"
+  },
+  {
+    id: 8,
+    name: "Daniella Batlle",
+    subtitle: "romance contemporáneo para la mujer moderna:",
+    description: "Siluetas etéreas y detalles delicados que capturan la esencia de la feminidad actual. Sus creaciones son el regalo perfecto para quien aprecia la sutileza, los acabados manuales y las prendas que cuentan una historia de amor por el diseño.",
+    image: "https://images.unsplash.com/photo-1524041255072-7da0525d6b34?q=80&w=600&auto=format&fit=crop",
+    tabText: "Romance"
+  }
+];
+
+const RealisticPaperclip = ({ className }: { className?: string }) => (
+  <svg 
+    className={className} 
+    viewBox="0 0 60 120" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ filter: 'drop-shadow(2px 3px 3px rgba(0,0,0,0.3))' }}
+  >
+    <path 
+      d="M25 90 V30 C25 15 45 15 45 30 V95 C45 115 15 115 15 95 V20 C15 5 35 5 35 20 V80" 
+      stroke="#9ca3af" 
+      strokeWidth="4" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <path 
+      d="M25 90 V30 C25 15 45 15 45 30 V95 C45 115 15 115 15 95 V20 C15 5 35 5 35 20 V80" 
+      stroke="#f3f4f6" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      strokeOpacity="0.6"
+      transform="translate(-1, -1)"
+    />
+  </svg>
+);
+
+function FolderCard({ designer, index }: { designer: typeof designers[0], index: number }) {
+  return (
+    <motion.div 
+      id={`designer-${designer.id}`}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="scroll-mt-[180px] relative pl-8 md:pl-10 pt-4 w-full group flex flex-col h-full min-h-[500px]"
+    >
+      {/* Tab */}
+      <div className="absolute left-0 top-12 md:top-16 w-8 md:w-10 h-28 md:h-36 bg-[var(--color-folder)] rounded-l-xl border border-[var(--color-folder-border)] border-r-0 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:-translate-x-1 z-0">
+        <span className="-rotate-90 whitespace-nowrap font-serif italic text-gray-500 tracking-wider text-xs md:text-sm">
+          {designer.tabText}
+        </span>
+      </div>
+      
+      {/* Main Folder */}
+      <div className="bg-[var(--color-folder)] rounded-r-2xl rounded-bl-2xl rounded-tl-md border border-[var(--color-folder-border)] p-5 md:p-8 shadow-sm relative z-10 w-full flex flex-col flex-grow transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl">
+        
+        {/* Text Content */}
+        <div className="mb-8 flex-grow">
+          <h3 className="font-serif text-2xl md:text-3xl text-gray-900 mb-3 leading-tight">
+            <span className="italic font-semibold">{designer.name}</span>{' '}
+            <span className="text-lg md:text-xl italic text-gray-700 font-normal">{designer.subtitle}</span>
+          </h3>
+          <p className="font-sans text-sm text-gray-800 leading-relaxed font-medium">
+            {designer.description}
+          </p>
+        </div>
+
+        {/* Polaroid Image */}
+        <div className="relative mt-auto mb-6">
+          {/* Paperclip */}
+          <div className="absolute -top-6 -left-5 z-20 transform -rotate-[25deg] w-12 h-24">
+             <RealisticPaperclip className="w-full h-full" />
+          </div>
+          
+          <div className="bg-[#FDFCFB] p-3 shadow-md transform rotate-1 group-hover:rotate-0 transition-transform duration-500 relative flex">
+            <div className="w-[85%] overflow-hidden bg-gray-200">
+              <img 
+                src={designer.image} 
+                alt={`Colección de ${designer.name}`} 
+                className="w-full aspect-[4/5] object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" 
+                loading="lazy"
+              />
+            </div>
+            <div className="w-[15%] flex items-center justify-center">
+               <span 
+                 className="font-serif italic text-lg text-gray-400 tracking-widest"
+                 style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+               >
+                 {designer.name}
+               </span>
+            </div>
+          </div>
+        </div>
+        
+        {/* CTA Button */}
+        <div className="mt-auto pt-4 border-t border-[var(--color-folder-border)] border-opacity-50">
+          <button 
+            className="w-full flex items-center justify-between group/btn py-2 text-gray-800 hover:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-[var(--color-folder)] rounded-sm"
+            aria-label={`Descubrir regalos de ${designer.name}`}
+          >
+            <span className="font-sans text-xs md:text-sm uppercase tracking-widest font-semibold">Descubrir Regalos</span>
+            <ArrowRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function DesignerDropdown({ isScrolled }: { isScrolled: boolean }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState("Filtrar por Diseñador");
+
+  const handleSelect = (designer: typeof designers[0] | null) => {
+    if (designer) {
+      setSelected(designer.name);
+      setIsOpen(false);
+      const element = document.getElementById(`designer-${designer.id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else {
+      setSelected("Filtrar por Diseñador");
+      setIsOpen(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.designer-dropdown')) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  return (
+    <div className={`sticky z-40 w-full bg-[var(--color-bg-main)]/95 backdrop-blur-md border-y border-[var(--color-folder-border)] mb-12 shadow-sm transition-all duration-300 ${isScrolled ? 'top-[53px] py-2' : 'top-[81px] py-3'}`}>
+      <div className="max-w-[1800px] mx-auto px-4 md:px-8 lg:px-12 flex justify-center designer-dropdown">
+        <div className="relative w-full max-w-xs md:max-w-sm">
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className={`w-full flex items-center justify-between bg-[var(--color-folder)] border border-[var(--color-folder-border)] px-5 rounded-sm shadow-sm text-sm font-sans font-medium text-gray-800 hover:bg-white transition-all duration-300 ${isScrolled ? 'py-2' : 'py-3'}`}
+          >
+            <span className="font-serif italic text-base">{selected}</span>
+            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+          </button>
+          
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-full left-0 w-full mt-1 bg-white border border-[var(--color-folder-border)] rounded-sm shadow-xl overflow-hidden z-50"
+              >
+                <ul className="max-h-64 overflow-y-auto py-2">
+                  <li>
+                    <button
+                      onClick={() => handleSelect(null)}
+                      className="w-full text-left px-5 py-2.5 text-sm font-serif italic text-gray-500 hover:bg-[var(--color-bg-main)] hover:text-black transition-colors"
+                    >
+                      Todos los diseñadores
+                    </button>
+                  </li>
+                  {designers.map(d => (
+                    <li key={d.id}>
+                      <button
+                        onClick={() => handleSelect(d)}
+                        className="w-full text-left px-5 py-2.5 text-sm font-serif text-gray-800 hover:bg-[var(--color-bg-main)] hover:text-black transition-colors"
+                      >
+                        {d.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div className="min-h-screen font-sans selection:bg-gray-800 selection:text-white pb-24">
+      {/* Navigation */}
+      <nav className={`w-full px-6 md:px-12 flex justify-between items-center border-b border-[var(--color-folder-border)] sticky top-0 bg-[var(--color-bg-main)]/90 backdrop-blur-sm z-50 transition-all duration-300 ${isScrolled ? 'py-3' : 'py-6'}`}>
+        <div className={`font-serif font-bold tracking-widest uppercase transition-all duration-300 ${isScrolled ? 'text-xl' : 'text-2xl'}`}>Malva</div>
+        <div className={`font-sans uppercase tracking-widest font-medium transition-all duration-300 ${isScrolled ? 'text-[10px]' : 'text-xs md:text-sm'}`}>The Gift Guide</div>
+      </nav>
+
+      {/* Hero Section */}
+      <header className="scroll-mt-[100px] text-center max-w-4xl mx-auto py-16 md:py-24 px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h1 className="font-serif text-4xl md:text-6xl text-gray-900 mb-6 leading-tight">
+            The Gift Guide <br/>
+            <span className="italic text-gray-500 text-3xl md:text-5xl font-normal mt-2 block">Edición Diseñadores</span>
+          </h1>
+          <p className="font-sans text-gray-700 text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium">
+            En Malva celebramos a las mujeres que transforman la industria con carácter y estilo. 
+            Fashion Leaders es un homenaje a su creatividad y determinación, a las mujeres que 
+            están construyendo y redefiniendo el futuro de la moda en Colombia.
+          </p>
+        </motion.div>
+      </header>
+
+      <DesignerDropdown isScrolled={isScrolled} />
+
+      {/* Grid Section */}
+      <main className="max-w-[1800px] mx-auto px-4 md:px-8 lg:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-24 gap-x-6 md:gap-x-10 pb-32">
+          {designers.map((designer, index) => (
+            <FolderCard key={designer.id} designer={designer} index={index} />
+          ))}
+        </div>
+      </main>
+    </div>
+  );
+}
